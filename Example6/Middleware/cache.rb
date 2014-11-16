@@ -7,11 +7,9 @@ class Cache
   end
 
   def call(env)
-    path = env["REQUEST_PATH"]
-
     app.call(env).tap do |res|
       pattern.each do |p, config|
-        if path =~ generated_pattern(p)
+        if env["REQUEST_PATH"] =~ generated_pattern(p)
           res[1]["Cache-Control"] = config[:cache_control] if config.has_key? :cache_control
           res[1]["Expires"] = (Time.now + config[:expires]).utc.rfc2822 if config.has_key? :expires
         end
