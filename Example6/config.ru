@@ -17,6 +17,8 @@ class App
     else
       Rack::Response.new("Not found?", 404)
     end
+  rescue Exception => e
+    Rack::Response.new("Server Error? #{e.backtrace.join('\n')}", 500)
   end
 end
 
